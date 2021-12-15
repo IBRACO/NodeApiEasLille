@@ -1,0 +1,111 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  button(onclick='getAllUsers()' style='margin-right:10px' ) Get All Users
+  button(onclick='getOneUser()' style='margin-right:10px' ) Get One User
+  button(onclick='createUser()' style='margin-right:10px') Create User
+  button(onclick='createContact()' style='margin-right:10px') Create contact
+  button(onclick='updateUser()' style='margin-right:10px') Update User
+  button(onclick='deleteUser()' style='margin-right:10px') Del User
+  button(onclick='deleteContact()' style='margin-right:10px') Del contact
+  button(onclick='verifToken()' style='margin-right:10px') Verifier token
+  button(onclick='loginAdmin()' ) Login Admin
+  button(onclick='sendMail()') send mail
+  br
+  div#display
+  script.
+   function getAllUsers(){
+      fetch('users/').then((resp)=>resp.text()).then(
+        (text) => {
+          document.getElementById('display').innerText = text;
+        }
+      )
+    }
+   function getOneUser(){
+      fetch('users/2').then((resp)=>resp.text()).then(
+        (text) => {
+          document.getElementById('display').innerText = text;
+        }
+      )
+    }
+    function createUser(){
+      const body = JSON.stringify({nom:"Buyoya",prenom : "ibrahim",email:'buyoyaneymar@gmail.com', password:'admin',telephone:7854554552,role:1,is_active:1,deleted:0,token:'bojour'})
+      const headers = {'Content-Type':'application/json'}
+      fetch('utilisateur/create',{method:'POST', body, headers}).then((resp)=>resp.text()).then(
+        (text) => {
+          document.getElementById('display').innerText = text;
+        }
+      )
+    }
+    function createContact(){
+      const body = JSON.stringify({nom:"niruze",prenom : "sokwe",email:'sokwe@gmail.com', password:'ayad',telephone:7854554552})
+      const headers = {'Content-Type':'application/json'}
+      fetch('contact/create',{method:'POST', body, headers}).then((resp)=>resp.text()).then(
+        (text) => {
+          document.getElementById('display').innerText = text;
+        }
+      )
+    }
+
+      function updateUser(){
+      const body = JSON.stringify({password  :'admin',token : 'bonjour'})
+      const headers = {'Content-Type':'application/json',}
+      fetch('utilisateur/update/150',{method:'POST', body, headers}).then((resp)=>resp.text()).then(
+        (text) => {
+          document.getElementById('display').innerText = text;
+        }
+      )
+    }
+      function verifToken(){
+      const body = JSON.stringify({token:'eyJlbWFpbCI6ImJ1eW95YW5leW1hckBnbWFpbC5jb20iLCJ0aW1lIjoxNjI0MzA5NTIxfQ==$UMoMbRRYTz1C9hxLPGVlaQ$6KrgzgMKqRqZ53vnuG8nnoT+SOANDs76mee0Fbqgmow'})
+      const headers = {'Content-Type':'application/json',}
+      fetch('utilisateur/verifToken',{method:'POST', body, headers}).then((resp)=>resp.text()).then(
+        (text) => {
+          document.getElementById('display').innerText = text;
+        }
+      )
+    }
+       function deleteUser(){
+      //const body = JSON.stringify({password:'azerty'})
+      const headers = {'Content-Type':'application/json'}
+      fetch('utilisateur/delete/167',{method:'POST', headers}).then((resp)=>resp.text()).then(
+        (text) => {
+          document.getElementById('display').innerText = text;
+        }
+      )
+    }
+       function deleteContact(){
+      //const body = JSON.stringify({password:'azerty'})
+      const headers = {'Content-Type':'application/json'}
+      fetch('contact/delete/2',{method:'POST', headers}).then((resp)=>resp.text()).then(
+        (text) => {
+          document.getElementById('display').innerText = text;
+        }
+      )
+    }
+      function loginAdmin(){
+      const body = JSON.stringify({email:'buyoya@gmail.com', password:'admin'})
+      const headers = {'Content-Type':'application/json'}
+      fetch('login',{method:'POST', body, headers}).then((resp)=>resp.text()).then(
+        (text) => {
+          document.getElementById('display').innerText = text;
+          token = JSON.parse(text).token
+        }
+      )
+    }
+    function sendMail() {
+      let body = JSON.stringify({to:"buyoyaibrahim@gmail.com", subject:"test", text:"test aussi !"})
+      let headers= {
+        'Content-Type': 'application/json'
+      }
+      fetch("mail",{method:'POST', body, headers}).then(res => res.text())
+          .then(
+            (result) => {
+              document.getElementById("display").innerText = result;
+            },
+          )
+    }
+
+       
